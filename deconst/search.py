@@ -26,18 +26,39 @@ def get_doc_repos():
     GET /orgs/:org/repos
     """
     # Get list of repos in the rackerlabs org GET /orgs/:org/repos
-    r = requests.get('https://api.github.com/orgs/rackerlabs/repos')
 
-    if (r.ok):
-       fullRepoList = json.loads(r.content)
-       print json.dumps(fullRepoList, sort_keys=True, indent=4)
-       
-       allReposList = fullRepoList['name']
-       print (allReposList)
-       
-       
+    user = getuser()
+    password = ''
+
+    while not password:
+        password = getpass('Password for {0}: '.format(user))
+
+    note = 'Deconst CLI app'
+    note_url = 'http://deconst.horse'
+    scopes = ['deconst', 'cli-deconst']
+    
+    auth = authorize(user, password, scopes, note, note_url)
+
+	with open(CREDENTIALS_FILE, 'w') as fd:
+		fd.write(auth.token + '\n')
+		fd.write(auth.id)
+	
+		token = id = ''
+	with open(CREDENTIALS_FILE, 'r') as fd:
+		token = fd.readline().strip()
+		id = fd.readline().strip()
+
+		gh = login(token=token)
+		auth = gh.authorization(id)
+		auth.update(add_scopes=['repo:status', 'gist'], rm_scopes=['user'])
+		rackerlabs = gh.org()
+    
+    for repos in gh.org():
+       if "rackerlabs" in repo.name:
+           print(repo.name)
+    
 def get_content_ids():
-    """List all content IDs on the site.
+    """Get content based on ID.
     
     GET /content/:id
     Access previously stored content by its URL-encoded content ID.
@@ -53,14 +74,50 @@ def get_content_ids():
     
     r = requests.get('https://developer.rackspace.com:9000/content/' + content_id)
     print (r.status_code)
-    categories = []
     if (r.ok):
        content = json.loads(r.content)
-       print (content['envelope'])
+    return r.json()
     
 def list_content_ids(self):
-    pass
     
+    allContentIds = [    
+	https://github.com/rackerlabs/docs-core-infra-user-guide/,
+	https://github.com/rackerlabs/rs-heat-docs/, 
+	https://github.com/rackspace/rack/, 
+	https://github.com/rackerlabs/docs-cloud-images/, 
+	https://github.com/rackerlabs/docs-cloud-load-balancers/v1/, 
+	https://github.com/rackerlabs/docs-cloud-load-balancers/v2/, 
+	https://github.com/rackerlabs/docs-cloud-block-storage/,
+	https://github.com/rackerlabs/docs-cloud-dns/v1/, 
+	https://github.com/rackerlabs/docs-cloud-dns/v2/, 
+	https://github.com/rackerlabs/docs-cloud-cdn/, 
+	https://github.com/rackerlabs/docs-cloud-databases/v1/, 
+	https://github.com/rackerlabs/docs-cloud-backup/v1/, 
+	https://github.com/rackerlabs/docs-cloud-backup/v2/, 
+	https://github.com/rackerlabs/docs-cloud-orchestration/, 
+	https://github.com/rackerlabs/heat-resource-ref/, 
+	https://github.com/rackerlabs/docs-cloud-rackconnect/, 
+	https://github.com/rackerlabs/docs-cloud-queues/, 
+	https://github.com/rackerlabs/docs-cloud-networks/, 
+	https://github.com/rackerlabs/docs-cloud-big-data/v2/, 
+	https://github.com/rackerlabs/otter/, 
+	https://github.com/rackerlabs/docs-cloud-servers/, 
+	https://github.com/rackerlabs/docs-cloud-files/, 
+	https://github.com/rackerlabs/docs-cloud-metrics/, 
+	https://github.com/rackerlabs/docs-cloud-identity/, 
+	https://github.com/rackerlabs/docs-cloud-monitoring/, 
+	https://github.com/rackerlabs/docs-barbican/, 
+	https://github.com/rackerlabs/docs-dedicated-networking/, 
+	https://github.com/rackerlabs/docs-common/, 
+	https://github.com/rackerlabs/docs-rpc/v11/, 
+	https://github.com/rackerlabs/docs-rpc/v10/, 
+	https://github.com/rackerlabs/docs-dedicated-vcloud/, 
+	https://github.com/rackerlabs/docs-redhat-osp/
+    ]
+
+    for id in allContentIds:
+        content_id = quote(content_id)
+    return content_id
     
 def list_by_search_term():
     """List content URLs with a certain tag.
