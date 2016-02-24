@@ -16,6 +16,7 @@
 # limitations under the License.
 
 import requests
+from requests.utils import quote
 import json
 
 def get_doc_repos():
@@ -33,7 +34,7 @@ def get_doc_repos():
        
        allReposList = fullRepoList['name']
        print (allReposList)
-       docReposList = 
+       
        
 def get_content_ids():
     """List all content IDs on the site.
@@ -50,7 +51,7 @@ def get_content_ids():
     content_id = quote('https://github.com/rackerlabs/docs-container-service', safe='')
     print (content_id)    
     
-    r = requests.get('https://developer.rackspace.com:9000/content')
+    r = requests.get('https://developer.rackspace.com:9000/content/' + content_id)
     print (r.status_code)
     categories = []
     if (r.ok):
@@ -74,7 +75,16 @@ def list_by_search_term():
     that contain at least one matching category.
 
     """
-    pass
+    content_id = quote('https://github.com/rackerlabs/docs-container-service', safe='')
+    print (content_id)
+    term = "container"
+
+    r = requests.get('https://developer.rackspace.com:9000/search?q=' + term)
+    print (r.status_code)
+
+    if (r.ok):
+       content = json.loads(r.content)
+       print (content['title'])
 
 def main():
 
