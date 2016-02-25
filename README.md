@@ -1,18 +1,7 @@
 # python-deconst
 
-A python-deconst client offers a mashup of the GitHub API mixed
-with the Deconst Content API to make content and search commands simpler.
-
-# Installation
-
-If you don't use `pipsi`, you're missing out.
-Here are [installation instructions](https://github.com/mitsuhiko/pipsi#readme).
-
-Simply run:
-
-    $ pipsi install .
-
-To install the contents of this repo as a client.
+A python-deconst client offers access to the Deconst Content API to make content and
+search commands simpler.
 
 # Development
 
