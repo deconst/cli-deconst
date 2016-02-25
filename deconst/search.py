@@ -16,7 +16,9 @@
 # limitations under the License.
 
 import requests
+from requests.utils import quote
 import json
+import prettyprint
 
 def get_doc_repos():
     """
@@ -25,18 +27,10 @@ def get_doc_repos():
     GET /orgs/:org/repos
     """
     # Get list of repos in the rackerlabs org GET /orgs/:org/repos
-    r = requests.get('https://api.github.com/orgs/rackerlabs/repos')
-
-    if (r.ok):
-       fullRepoList = json.loads(r.content)
-       print json.dumps(fullRepoList, sort_keys=True, indent=4)
-       
-       allReposList = fullRepoList['name']
-       print (allReposList)
-       docReposList = 
-       
-def get_content_ids():
-    """List all content IDs on the site.
+    pass
+    
+def get_content_by_id(content_id):
+    """Get content based on ID.
     
     GET /content/:id
     Access previously stored content by its URL-encoded content ID.
@@ -47,19 +41,56 @@ def get_content_ids():
       "envelope": {}
     }
     """
-    content_id = quote('https://github.com/rackerlabs/docs-container-service', safe='')
-    print (content_id)    
+    # content_id = quote('https://github.com/rackerlabs/docs-container-service', safe='')
+    # print (content_id)    
     
-    r = requests.get('https://developer.rackspace.com:9000/content')
-    print (r.status_code)
-    categories = []
+    r = requests.get('https://developer.rackspace.com:9000/content/' + content_id)
+    # print (r.status_code)
+    # print (r.headers)
     if (r.ok):
        content = json.loads(r.content)
-       print (content['envelope'])
+    return r.json()
     
-def list_content_ids(self):
-    pass
     
+def list_content_ids():
+    
+    allContentIds = [    
+	'https://github.com/rackerlabs/docs-core-infra-user-guide',
+	'https://github.com/rackerlabs/rs-heat-docs', 
+	'https://github.com/rackspace/rack', 
+	'https://github.com/rackerlabs/docs-cloud-images', 
+	'https://github.com/rackerlabs/docs-cloud-load-balancers/v1', 
+	'https://github.com/rackerlabs/docs-cloud-load-balancers/v2', 
+	'https://github.com/rackerlabs/docs-cloud-block-storage',
+	'https://github.com/rackerlabs/docs-cloud-dns/v1', 
+	'https://github.com/rackerlabs/docs-cloud-dns/v2', 
+	'https://github.com/rackerlabs/docs-cloud-cdn', 
+	'https://github.com/rackerlabs/docs-cloud-databases/v1', 
+	'https://github.com/rackerlabs/docs-cloud-backup/v1', 
+	'https://github.com/rackerlabs/docs-cloud-backup/v2', 
+	'https://github.com/rackerlabs/docs-cloud-orchestration', 
+	'https://github.com/rackerlabs/heat-resource-ref', 
+	'https://github.com/rackerlabs/docs-cloud-rackconnect', 
+	'https://github.com/rackerlabs/docs-cloud-queues', 
+	'https://github.com/rackerlabs/docs-cloud-networks', 
+	'https://github.com/rackerlabs/docs-cloud-big-data/v2', 
+	'https://github.com/rackerlabs/otter', 
+	'https://github.com/rackerlabs/docs-cloud-servers', 
+	'https://github.com/rackerlabs/docs-cloud-files', 
+	'https://github.com/rackerlabs/docs-cloud-metrics', 
+	'https://github.com/rackerlabs/docs-cloud-identity', 
+	'https://github.com/rackerlabs/docs-cloud-monitoring', 
+	'https://github.com/rackerlabs/docs-barbican', 
+	'https://github.com/rackerlabs/docs-dedicated-networking', 
+	'https://github.com/rackerlabs/docs-common', 
+	'https://github.com/rackerlabs/docs-rpc/v11', 
+	'https://github.com/rackerlabs/docs-rpc/v10', 
+	'https://github.com/rackerlabs/docs-dedicated-vcloud', 
+	'https://github.com/rackerlabs/docs-redhat-osp'
+    ]
+
+    return [quote(item, safe='') for item in allContentIds]
+
     
 def list_by_search_term():
     """List content URLs with a certain tag.
@@ -74,9 +105,21 @@ def list_by_search_term():
     that contain at least one matching category.
 
     """
-    pass
+    content_id = quote('https://github.com/rackerlabs/docs-container-service', safe='')
+    print (content_id)
+    term = "container"
+
+    r = requests.get('https://developer.rackspace.com:9000/search?q=' + term)
+    print (r.status_code)
+
+    if (r.ok):
+       content = json.loads(r.content)
+       print (content['title'])
 
 def main():
 
-    get_doc_repos()
-    get_content_ids()
+    for content_id in list_content_ids():
+        envelope = get_content_by_id(content_id)
+        print envelope['envelope']['title']    
+
+    
