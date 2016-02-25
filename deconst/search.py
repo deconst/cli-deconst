@@ -16,7 +16,9 @@
 # limitations under the License.
 
 import requests
+from requests.utils import quote
 import json
+import prettyprint
 
 def get_doc_repos():
     """
@@ -25,15 +27,8 @@ def get_doc_repos():
     GET /orgs/:org/repos
     """
     # Get list of repos in the rackerlabs org GET /orgs/:org/repos
-    #r = requests.get('https://api.github.com/orgs/rackerlabs/repos')
+    pass
 
-    #if (r.ok):
-    #   fullRepoList = json.loads(r.content)
-    #   print json.dumps(fullRepoList, sort_keys=True, indent=4)
-       
-    #   allReposList = fullRepoList['name']
-    #   print (allReposList)
-       
 def get_content_by_id(content_id):
     """Get content based on ID.
     
@@ -61,6 +56,7 @@ def list_content_ids():
     """"
     List pulled from the nexus-control repo and could change.
     """"    
+    
     allContentIds = [    
 	'https://github.com/rackerlabs/docs-core-infra-user-guide',
 	'https://github.com/rackerlabs/rs-heat-docs', 
@@ -114,7 +110,16 @@ def list_by_search_term():
     that contain at least one matching category.
 
     """
-    pass
+    content_id = quote('https://github.com/rackerlabs/docs-container-service', safe='')
+    print (content_id)
+    term = "container"
+
+    r = requests.get('https://developer.rackspace.com:9000/search?q=' + term)
+    print (r.status_code)
+
+    if (r.ok):
+       content = json.loads(r.content)
+       print (content['title'])
 
 def main():
 
