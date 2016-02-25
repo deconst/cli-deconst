@@ -28,7 +28,7 @@ def get_doc_repos():
     """
     # Get list of repos in the rackerlabs org GET /orgs/:org/repos
     pass
-    
+
 def get_content_by_id(content_id):
     """Get content based on ID.
     
@@ -53,6 +53,9 @@ def get_content_by_id(content_id):
     
     
 def list_content_ids():
+    """"
+    List pulled from the nexus-control repo and could change.
+    """"    
     
     allContentIds = [    
 	'https://github.com/rackerlabs/docs-core-infra-user-guide',
@@ -86,7 +89,9 @@ def list_content_ids():
 	'https://github.com/rackerlabs/docs-rpc/v11', 
 	'https://github.com/rackerlabs/docs-rpc/v10', 
 	'https://github.com/rackerlabs/docs-dedicated-vcloud', 
-	'https://github.com/rackerlabs/docs-redhat-osp'
+	'https://github.com/rackerlabs/docs-redhat-osp',
+	'https://github.com/rackerlabs/docs-container-service',
+	'https://github.com/rackerlabs/rackspace-how-to'
     ]
 
     return [quote(item, safe='') for item in allContentIds]
@@ -122,4 +127,3 @@ def main():
         envelope = get_content_by_id(content_id)
         print envelope['envelope']['title']    
 
-    
