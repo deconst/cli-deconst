@@ -18,7 +18,6 @@
 import requests
 from requests.utils import quote
 import json
-import prettyprint
 
 def get_doc_repos():
     """
@@ -53,9 +52,10 @@ def get_content_by_id(content_id):
     
     
 def list_content_ids():
-    """"
-    List pulled from the nexus-control repo and could change.
-    """"    
+    """List pulled from the nexus-control repo and could change.
+    
+    Uses a hand-built list for now.
+    """    
     
     allContentIds = [    
 	'https://github.com/rackerlabs/docs-core-infra-user-guide',
@@ -97,7 +97,7 @@ def list_content_ids():
     return [quote(item, safe='') for item in allContentIds]
 
     
-def list_by_search_term():
+def list_by_search_term(term):
     """List content URLs with a certain tag.
     
     GET /search?q=:term&pageNumber=:num&perPage=:size&categories=deconst.horse
@@ -110,20 +110,18 @@ def list_by_search_term():
     that contain at least one matching category.
 
     """
-    content_id = quote('https://github.com/rackerlabs/docs-container-service', safe='')
-    print (content_id)
-    term = "container"
 
     r = requests.get('https://developer.rackspace.com:9000/search?q=' + term)
     print (r.status_code)
 
     if (r.ok):
-       content = json.loads(r.content)
-       print (content['title'])
+       return json.loads(r.content)
 
 def main():
 
     for content_id in list_content_ids():
         envelope = get_content_by_id(content_id)
         print envelope['envelope']['title']    
-
+        
+    keywordSearch = list_by_search_term('container')
+    print keywordSearch['total']
