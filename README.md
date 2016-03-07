@@ -1,7 +1,17 @@
-# python-deconst
+# cli-deconst
 
-A python-deconst client offers access to the Deconst Content API to make content and
-search commands simpler.
+A Python-based deconst client offers access to the Deconst Content API to make content and
+search commands simpler. Currently supports only read commands, none that require an admin token.
+
+# Usage
+
+'''
+
+deconst_list --metadata <type of metadata>
+deconst_term_search --term <search term>
+deconst_scoped_search --scope=<id or url> -- term <search term>
+
+'''
 
 # Development
 
@@ -10,17 +20,19 @@ the [Python click library](http://click.pocoo.org/5/) code to make the CLI run.
 
 # Use cases
 
-I want to list of all content IDs on the site.
+These may or may not be possible currently, but listing for inspiration and creative flow.
 
-I want to list of content URLs with a certain tag.
+* I want to list of all content IDs on the site.
 
-I want to run a report of recently updated files.
+* I want to list of content URLs with a certain tag.
 
-I want to create navigation ideas by listing collections of categories or keywords or tags.
+* I want to run a report of recently updated files.
 
-I want to list content based on the info in the metadata envelope.
+* I want to create navigation ideas by listing collections of categories or keywords or tags.
 
-I want to tweet a link to content based on a particular tag or updated date.
+* I want to list content based on the info in the metadata envelope.
+
+* I want to tweet a link to content based on a particular tag or updated date.
 
 
 API: https://github.com/deconst/content-service#api
