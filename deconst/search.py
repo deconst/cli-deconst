@@ -18,6 +18,8 @@
 import requests
 from requests.utils import quote
 import json
+from tabulate import tabulate
+
 
 def get_doc_repos():
     """
@@ -40,18 +42,14 @@ def get_content_by_id(content_id):
       "envelope": {}
     }
     """
-    # content_id = quote('https://github.com/rackerlabs/docs-container-service', safe='')
-    # print (content_id)    
     
     r = requests.get('https://developer.rackspace.com:9000/content/' + content_id)
-    # print (r.status_code)
-    # print (r.headers)
     if (r.ok):
        content = json.loads(r.content)
     return r.json()
+
     
-    
-def list_content_ids():
+def get_content_id(url):
     """List pulled from the nexus-control repo and could change.
     
     Uses a hand-built list for now.
@@ -94,8 +92,11 @@ def list_content_ids():
 	'https://github.com/rackerlabs/rackspace-how-to'
     ]
 
-    return [quote(item, safe='') for item in allContentIds]
-
+    # return [quote(item, safe='') for item in allContentIds]
+    for item in allContentIds:
+        if item == url:
+            return quote(item, safe='')
+        
     
 def list_by_search_term(term):
     """List content URLs with a certain tag.
@@ -112,16 +113,16 @@ def list_by_search_term(term):
     """
 
     r = requests.get('https://developer.rackspace.com:9000/search?q=' + term)
-    print (r.status_code)
+    #print (r.status_code)
 
     if (r.ok):
        return json.loads(r.content)
 
 def main():
 
-    for content_id in list_content_ids():
-        envelope = get_content_by_id(content_id)
-        print envelope['envelope']['title']    
-        
+    cs = get_content_id('https://github.com/rackerlabs/docs-cloud-servers')
+    envelope = get_content_by_id(cs)
+    table = envelope['envelope']['title']
+    print table
     keywordSearch = list_by_search_term('container')
-    print keywordSearch['total']
+    print keywordSearch

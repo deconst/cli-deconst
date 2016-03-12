@@ -9,7 +9,7 @@ setup(
     name='deconst',
     version='0.1.0',
     url='https://github.com/annegentle/python-deconst',
-    license='BSD',
+    license='ASL2',
     author='Anne Gentle',
     author_email='anne.gentle@rackspace.com',
     description='Deconstmakes content and search commands simpler.',
